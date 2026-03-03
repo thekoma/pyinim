@@ -11,6 +11,7 @@ from pyinim.cloud.types.devices import Devices
 
 _LOGGER = logging.getLogger(__name__)
 
+
 class InimAPI(abc.ABC):
     """Provide an idiomatic API for making calls to Inim's API."""
 
@@ -70,7 +71,9 @@ class InimAPI(abc.ABC):
         try:
             response = self.resolver.str_to_devices(raw_response, device_id)
         except Exception as e:
-            message = f"Failed to get Devices with {status=} and payload {raw_response=}"
+            message = (
+                f"Failed to get Devices with {status=} and payload {raw_response=}"
+            )
             _LOGGER.warning(message)
             raise MalformedResponseError(message) from e
         return status, headers, response
@@ -82,6 +85,19 @@ class InimAPI(abc.ABC):
             "GET",
             self.resolver.get_activate_scenario_url(
                 await self.token(), device_id, scenario_id
+            ),
+            headers={},
+        )
+        return status, headers, raw_response
+
+    async def set_zone_bypass(
+        self, device_id: str, zone_id: int, code: str, mode: int = 3, value: int = 0
+    ) -> Tuple[int, Mapping[str, str], str]:
+        """Bypass or unbypass a zone. value=0 for bypass?, value=1 for unbypass?"""
+        status, headers, raw_response = await self._request(
+            "GET",
+            self.resolver.get_set_zone_bypass_url(
+                await self.token(), device_id, zone_id, code, mode, value
             ),
             headers={},
         )

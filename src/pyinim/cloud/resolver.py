@@ -51,6 +51,24 @@ class CloudResolver:
     def get_activate_scenario_url(self, token, device_id, scenario_id):
         return f'{API_CLOUD_BASEURL}?req={{"Node":"","Name":"AlienMobilePro","ClientIP":"","Method":"ActivateScenario","ClientId": "{self.client_id}","Token":"{token}","Params":{{"DeviceId":"{device_id}","ScenarioId":"{scenario_id}"}}}}'
 
+    def get_set_zone_bypass_url(self, token, device_id, zone_id, code, mode, value):
+        data = {
+            "Node": "inimhome",
+            "Name": "it.inim.inimutenti",
+            "ClientIP": "",
+            "Method": "InsertZone",
+            "Token": token,
+            "ClientId": self.client_id,
+            "Params": {
+                "ZoneId": int(zone_id),
+                "Mode": int(mode),
+                "DeviceId": str(device_id),
+                "Code": str(code),
+                "Value": int(value),
+            },
+        }
+        return f"{API_CLOUD_BASEURL}?req={json.dumps(data)}"
+
     def str_to_token(self, data: str):
         token: Token = json.loads(data, object_hook=lambda d: SimpleNamespace(**d))
         return token

@@ -1,6 +1,5 @@
 import json
 from types import SimpleNamespace
-import sys
 from pyinim.cloud.types.token import Token
 from pyinim.cloud.types.devices import Devices
 
@@ -43,13 +42,43 @@ class CloudResolver:
         return f"{API_CLOUD_BASEURL}?req={json.dumps(data)}"
 
     def get_devices_extended_url(self, token):
-        return f'{API_CLOUD_BASEURL}?req={{"Params":{{"Info":4223}},"Node":"","Name":"Inim Home","ClientIP":"","Method":"GetDevicesExtended","Token":"{token}","ClientId": "{self.client_id}","Context":"intrusion"}}'
+        data = {
+            "Params": {"Info": 4223},
+            "Node": "",
+            "Name": "Inim Home",
+            "ClientIP": "",
+            "Method": "GetDevicesExtended",
+            "Token": token,
+            "ClientId": self.client_id,
+            "Context": "intrusion",
+        }
+        return f"{API_CLOUD_BASEURL}?req={json.dumps(data)}"
 
     def get_request_poll_url(self, token, device_id):
-        return f'{API_CLOUD_BASEURL}?req={{"Params":{{"DeviceId":{device_id},"Type":5}},"Node":"","Name":"Inim Home","ClientIP":"","Method":"RequestPoll","Token":"{token}","ClientId":"{self.client_id}","Context":"intrusion"}}'
+        # DeviceId gets rendered without quotes in the original, so keeping it an int/string type instead of forcing str quotes.
+        data = {
+            "Params": {"DeviceId": int(device_id), "Type": 5},
+            "Node": "",
+            "Name": "Inim Home",
+            "ClientIP": "",
+            "Method": "RequestPoll",
+            "Token": token,
+            "ClientId": self.client_id,
+            "Context": "intrusion",
+        }
+        return f"{API_CLOUD_BASEURL}?req={json.dumps(data)}"
 
     def get_activate_scenario_url(self, token, device_id, scenario_id):
-        return f'{API_CLOUD_BASEURL}?req={{"Node":"","Name":"AlienMobilePro","ClientIP":"","Method":"ActivateScenario","ClientId": "{self.client_id}","Token":"{token}","Params":{{"DeviceId":"{device_id}","ScenarioId":"{scenario_id}"}}}}'
+        data = {
+            "Node": "",
+            "Name": "AlienMobilePro",
+            "ClientIP": "",
+            "Method": "ActivateScenario",
+            "ClientId": self.client_id,
+            "Token": token,
+            "Params": {"DeviceId": str(device_id), "ScenarioId": str(scenario_id)},
+        }
+        return f"{API_CLOUD_BASEURL}?req={json.dumps(data)}"
 
     def get_set_zone_bypass_url(self, token, device_id, zone_id, code, mode, value):
         data = {

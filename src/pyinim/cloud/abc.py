@@ -103,6 +103,19 @@ class InimAPI(abc.ABC):
         )
         return status, headers, raw_response
 
+    async def insert_areas(
+        self, device_id: str, area_ids: list[int], mode: int, code: str
+    ) -> Tuple[int, Mapping[str, str], str]:
+        """Arm or disarm specific areas directly. mode=0 for Disarm, 1 for Arm Away, 2 for Arm Home."""
+        status, headers, raw_response = await self._request(
+            "GET",
+            self.resolver.get_insert_areas_url(
+                await self.token(), device_id, area_ids, mode, code
+            ),
+            headers={},
+        )
+        return status, headers, raw_response
+
     async def get_devices_list(self) -> dict[str, Devices]:
         """Gets a map of all devices."""
         status, headers, raw_response = await self._request(

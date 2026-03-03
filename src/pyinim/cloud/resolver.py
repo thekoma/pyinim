@@ -14,8 +14,7 @@ class CloudResolver:
 
     def get_token_url(self):
         data = {
-            "Node": "",
-            "Name": "AlienMobilePro",
+            "Node": "inimhome",
             "ClientIP": "",
             "Method": "RegisterClient",
             "ClientId": "",
@@ -43,7 +42,9 @@ class CloudResolver:
 
     def get_devices_extended_url(self, token):
         data = {
-            "Params": {"Info": 4223},
+            "Params": {
+                "Info": 4223,
+            },
             "Node": "",
             "Name": "Inim Home",
             "ClientIP": "",
@@ -57,7 +58,10 @@ class CloudResolver:
     def get_request_poll_url(self, token, device_id):
         # DeviceId gets rendered without quotes in the original, so keeping it an int/string type instead of forcing str quotes.
         data = {
-            "Params": {"DeviceId": int(device_id), "Type": 5},
+            "Params": {
+                "DeviceId": int(device_id),
+                "Type": 5,
+            },
             "Node": "",
             "Name": "Inim Home",
             "ClientIP": "",
@@ -70,13 +74,15 @@ class CloudResolver:
 
     def get_activate_scenario_url(self, token, device_id, scenario_id):
         data = {
-            "Node": "",
-            "Name": "AlienMobilePro",
+            "Name": "it.inim.inimutenti",
             "ClientIP": "",
             "Method": "ActivateScenario",
             "ClientId": self.client_id,
             "Token": token,
-            "Params": {"DeviceId": str(device_id), "ScenarioId": str(scenario_id)},
+            "Params": {
+                "DeviceId": str(device_id),
+                "ScenarioId": str(scenario_id),
+            },
         }
         return f"{API_CLOUD_BASEURL}?req={json.dumps(data)}"
 
@@ -94,6 +100,23 @@ class CloudResolver:
                 "DeviceId": str(device_id),
                 "Code": str(code),
                 "Value": int(value),
+            },
+        }
+        return f"{API_CLOUD_BASEURL}?req={json.dumps(data)}"
+
+    def get_insert_areas_url(self, token, device_id, area_ids, mode, code):
+        data = {
+            "Node": "inimhome",
+            "Name": "it.inim.inimutenti",
+            "ClientIP": "",
+            "Method": "InsertAreas",
+            "Token": token,
+            "ClientId": self.client_id,
+            "Params": {
+                "AreaIds": area_ids,
+                "Mode": int(mode),
+                "DeviceId": str(device_id),
+                "Code": str(code),
             },
         }
         return f"{API_CLOUD_BASEURL}?req={json.dumps(data)}"

@@ -15,6 +15,7 @@ class CloudResolver:
     def get_token_url(self):
         data = {
             "Node": "inimhome",
+            "Name": "it.inim.inimutenti",
             "ClientIP": "",
             "Method": "RegisterClient",
             "ClientId": "",

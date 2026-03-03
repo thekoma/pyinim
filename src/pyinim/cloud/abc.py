@@ -93,7 +93,7 @@ class InimAPI(abc.ABC):
     async def set_zone_bypass(
         self, device_id: str, zone_id: int, code: str, mode: int = 3, value: int = 0
     ) -> Tuple[int, Mapping[str, str], str]:
-        """Bypass or unbypass a zone. value=0 for bypass?, value=1 for unbypass?"""
+        """Bypass or unbypass a zone. value=1 for bypass (exclude), value=0 for unbypass (include)."""
         status, headers, raw_response = await self._request(
             "GET",
             self.resolver.get_set_zone_bypass_url(
